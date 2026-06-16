@@ -17,9 +17,9 @@ let appState = {
   financeExpenses: [],
   exportLogs: [],
   settings: {
-    sheetId: "",
+    sheetId: "14oMD82-njMs2Fq93Dq3T3X3xtWo57GcUkj4pkXEfrSA",
     gasUrl: "",
-    syncEnabled: false
+    syncEnabled: true
   },
   currentView: "login",
   selectedCustomerForDetail: null,
@@ -108,7 +108,19 @@ function initApp() {
   const savedSettings = localStorage.getItem(STORAGE_PREFIX + "settings");
   if (savedSettings) {
     appState.settings = JSON.parse(savedSettings);
+    // If the saved settings don't have a sheet ID or have an empty one, fill it with the default
+    if (!appState.settings.sheetId) {
+      appState.settings.sheetId = "14oMD82-njMs2Fq93Dq3T3X3xtWo57GcUkj4pkXEfrSA";
+      appState.settings.syncEnabled = true;
+      localStorage.setItem(STORAGE_PREFIX + "settings", JSON.stringify(appState.settings));
+    }
+  } else {
+    // Save defaults to localStorage
+    localStorage.setItem(STORAGE_PREFIX + "settings", JSON.stringify(appState.settings));
   }
+
+  // Update connection status badge
+  updateConnectionStatus();
 
   // Load finance expenses
   const savedExpenses = localStorage.getItem(STORAGE_PREFIX + "expenses");
@@ -374,6 +386,23 @@ async function syncTableToSheets(tableName) {
     }
   } catch (error) {
     showToast("การเชื่อมต่อคลาวด์มีปัญหา: " + error.toString(), "warning");
+  }
+}
+
+function updateConnectionStatus() {
+  const badge = document.getElementById("connection-status-badge");
+  if (!badge) return;
+  
+  if (appState.settings.syncEnabled && appState.settings.gasUrl) {
+    badge.innerHTML = `
+      <span class="w-2.5 h-2.5 bg-green-500 rounded-full mr-2"></span>
+      เชื่อมต่อคลาวด์อัตโนมัติ (Google Sheets Sync)
+    `;
+  } else {
+    badge.innerHTML = `
+      <span class="w-2.5 h-2.5 bg-yellow-500 rounded-full mr-2"></span>
+      เชื่อมต่อข้อมูลภายในเครื่อง (Local Sandbox)
+    `;
   }
 }
 
@@ -2494,6 +2523,8 @@ function saveCloudSettingsSubmit() {
 
   localStorage.setItem(STORAGE_PREFIX + "settings", JSON.stringify(appState.settings));
   showToast("บันทึกการตั้งค่าการเชื่อมต่อคลาวด์แล้ว", "success");
+
+  updateConnectionStatus();
 
   if (syncEnabled && gasUrl) {
     fetchFromGoogleSheets();
