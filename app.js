@@ -306,7 +306,7 @@ async function fetchFromGoogleSheets() {
     const response = await fetch(appState.settings.gasUrl, {
       method: "POST",
       mode: "cors",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "text/plain" },
       body: JSON.stringify({ action: "fetchData" })
     });
     const result = await response.json();
@@ -375,7 +375,7 @@ async function syncTableToSheets(tableName) {
     const response = await fetch(appState.settings.gasUrl, {
       method: "POST",
       mode: "cors",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "text/plain" },
       body: JSON.stringify({ action: action, data: payload })
     });
     const result = await response.json();
@@ -2400,7 +2400,7 @@ function handleAddAdminSubmit() {
     fetch(appState.settings.gasUrl, {
       method: "POST",
       mode: "cors",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "text/plain" },
       body: JSON.stringify({ action: "registerUser", data: newUser })
     }).catch(e => console.error(e));
   }
@@ -2448,7 +2448,7 @@ function updateUserTierAction(targetUserId, newTier) {
     fetch(appState.settings.gasUrl, {
       method: "POST",
       mode: "cors",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "text/plain" },
       body: JSON.stringify({ action: "updateUserTier", data: { userId: targetUserId, tier: newTier } })
     }).catch(e => console.error(e));
   }
