@@ -1,0 +1,1739 @@
+<!DOCTYPE html>
+<html lang="th" class="h-full bg-gray-50 dark:bg-gray-900">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>บริษัท เดอะเนสท์ ดีเอ็นเอ จำกัด - THE NEST DNA CO.,LTD</title>
+  
+  <!-- SEO & Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=Sarabun:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Style Frameworks (Tailwind & FontAwesome Icons) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Data Visualization (Chart.js) & PDF Export (html2pdf) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <!-- Tailwind Configuration -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Sarabun', 'Inter', 'sans-serif'],
+            display: ['Outfit', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Sarabun', 'Inter', sans-serif;
+    }
+    .heading-font {
+      font-family: 'Outfit', 'Sarabun', sans-serif;
+    }
+    
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    .dark ::-webkit-scrollbar-thumb {
+      background: #475569;
+    }
+
+    /* Print Preview Styles */
+    @media print {
+      body {
+        background: white !important;
+        color: black !important;
+      }
+      /* Hide all UI elements except the printable area */
+      aside, header, nav, button, #login-section, #toast-container, .no-print {
+        display: none !important;
+      }
+      /* Keep the main application section visible but fluid for print */
+      #app-section {
+        display: block !important;
+        height: auto !important;
+        overflow: visible !important;
+      }
+      main, .flex-1 {
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
+        flex: none !important;
+      }
+      .p-6, .md:p-8 {
+        padding: 0 !important;
+      }
+      
+      /* Hide all other active view elements */
+      #dashboard-view, #customers-view, #samples-view, #receipts-view, #finance-view, #reports-view, #admins-view, #profile-view {
+        display: none !important;
+      }
+      #cert-preview-view, #receipt-preview-view, #bulk-preview-view, #summary-preview-view {
+        display: none !important;
+      }
+      
+      /* Print Certificate Layout Specifics */
+      #cert-preview-view:not(.hidden) {
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+      }
+      .cert-paper {
+        width: 15cm !important;
+        height: 10cm !important;
+        padding: 0.2cm !important;
+        border: none !important; /* Managed by inner HTML borders */
+        box-shadow: none !important;
+        page-break-after: avoid;
+        page-break-inside: avoid;
+      }
+      
+      /* Print Receipt Layout Specifics */
+      #receipt-preview-view:not(.hidden) {
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+      }
+      .receipt-paper {
+        padding: 0.4in !important;
+        border: none !important;
+        box-shadow: none !important;
+        width: 100% !important;
+      }
+
+      /* Print Envelope Layout Specifics */
+      #bulk-preview-view:not(.hidden) {
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+      }
+      .envelope-paper {
+        width: 7.5in !important;
+        height: 4.0in !important;
+        padding: 0.4in !important;
+        border: none !important;
+        box-shadow: none !important;
+        page-break-after: avoid;
+        page-break-inside: avoid;
+      }
+
+      /* Print Summary Layout Specifics */
+      #summary-preview-view:not(.hidden) {
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+      }
+      .summary-paper {
+        padding: 0.4in !important;
+        border: none !important;
+        box-shadow: none !important;
+        width: 100% !important;
+      }
+    }
+
+    /* 10x15 cm Certificate dimensions and text scaling */
+    .cert-paper {
+      width: 15cm;
+      height: 10cm;
+      position: relative;
+      background-color: white;
+      font-size: 11px !important;
+      padding: 0.3cm !important;
+    }
+    .cert-paper h1 {
+      font-size: 15px !important;
+    }
+    .cert-paper h2 {
+      font-size: 12px !important;
+    }
+    .cert-paper p, .cert-paper span, .cert-paper td, .cert-paper th {
+      font-size: 11px !important;
+    }
+    .cert-paper .text-xs, .cert-paper .text-sm {
+      font-size: 10px !important;
+    }
+    .cert-paper i {
+      font-size: 13px !important;
+    }
+    .cert-paper .w-14 {
+      width: 2.0rem !important;
+      height: 2.0rem !important;
+    }
+    .cert-paper .w-48 {
+      width: 8rem !important;
+    }
+    
+    .envelope-paper {
+      width: 7.5in;
+      height: 4.0in;
+      position: relative;
+      background-color: white;
+    }
+    
+    .summary-paper {
+      width: 21cm;
+      min-height: 29.7cm;
+      position: relative;
+      background-color: white;
+      padding: 1.2cm !important;
+    }
+  </style>
+</head>
+<body class="h-full text-slate-800 dark:text-slate-100 antialiased transition-colors duration-200">
+
+  <!-- Toast Notifications Container -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-[999] flex flex-col gap-2"></div>
+
+  <!-- ========================================== -->
+  <!-- 1. LOGIN SCREEN CONTAINER -->
+  <!-- ========================================== -->
+  <section id="login-section" class="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 overflow-hidden">
+    <!-- Pigeon Flying Canvas Background -->
+    <canvas id="pigeon-canvas" class="absolute inset-0 w-full h-full pointer-events-none"></canvas>
+    
+    <div class="relative z-10 w-full max-w-md p-8 sm:p-10 mx-4 bg-white/10 dark:bg-slate-900/40 backdrop-blur-md rounded-2xl border border-white/20 dark:border-white/5 shadow-2xl">
+      <!-- Title & Branding -->
+      <div class="text-center mb-6">
+        <img src="logo.jpg" class="w-24 h-24 rounded-full mx-auto mb-4 border-2 border-indigo-400 shadow-lg">
+        <h1 class="heading-font text-xl font-extrabold text-white tracking-wide">บริษัท เดอะเนสท์ ดีเอ็นเอ จำกัด</h1>
+        <p class="text-indigo-300 text-xs font-semibold uppercase tracking-wider mt-1">THE NEST DNA CO.,LTD</p>
+        <p class="text-indigo-200 text-xs mt-2">ระบบวิเคราะห์เพศนกและจัดการข้อมูลลูกค้า</p>
+      </div>
+
+      <!-- Login Form -->
+      <form onsubmit="event.preventDefault(); handleLoginSubmit(document.getElementById('login-username').value, document.getElementById('login-password').value);" class="space-y-6">
+        <div>
+          <label for="login-username" class="block text-sm font-semibold text-gray-200 mb-2">ชื่อผู้ใช้ / User ID</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-indigo-300">
+              <i class="fas fa-user-shield"></i>
+            </span>
+            <input type="text" id="login-username" required placeholder="กรอก User ID" autocomplete="username"
+              class="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all">
+          </div>
+        </div>
+
+        <div>
+          <div class="flex justify-between items-center mb-2">
+            <label for="login-password" class="block text-sm font-semibold text-gray-200">รหัสผ่าน / Password</label>
+          </div>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-indigo-300">
+              <i class="fas fa-lock"></i>
+            </span>
+            <input type="password" id="login-password" required placeholder="กรอกรหัสผ่าน" autocomplete="current-password"
+              class="w-full pl-10 pr-12 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all">
+            <button type="button" onclick="const p = document.getElementById('login-password'); p.type = p.type === 'password' ? 'text' : 'password'; this.querySelector('i').classList.toggle('fa-eye'); this.querySelector('i').classList.toggle('fa-eye-slash');"
+              class="absolute inset-y-0 right-0 flex items-center pr-3 text-indigo-300 hover:text-white">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg hover:shadow-indigo-500/30 transition-all duration-300">
+          เข้าสู่ระบบ <i class="fas fa-sign-in-alt ml-2"></i>
+        </button>
+      </form>
+
+      <!-- Credentials Helper Card (Sensitive details NOT filled automatically) -->
+      <div class="mt-8 p-4 bg-white/5 border border-white/10 rounded-xl text-xs text-indigo-200">
+        <p class="font-semibold text-white mb-1"><i class="fas fa-info-circle mr-1"></i> ข้อมูลเข้าสู่ระบบระบบการสาธิต:</p>
+        <p><strong>Super admin Account:</strong></p>
+        <p>User ID: <span class="font-mono text-white">hrdnci</span> | Password: <span class="font-mono text-white">123456</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- 2. MAIN APPLICATION VIEW SHELL -->
+  <!-- ========================================== -->
+  <section id="app-section" class="hidden h-screen flex overflow-hidden">
+    
+    <!-- Sidebar Navigation Drawer -->
+    <aside class="hidden md:flex md:flex-shrink-0">
+      <div class="flex flex-col w-64 bg-[#0f172a] text-white">
+        <!-- Brand Header -->
+        <div class="flex items-center justify-between h-16 px-6 bg-[#090d16] border-b border-gray-800">
+          <div class="flex items-center space-x-2">
+            <img src="logo.jpg" class="w-8 h-8 rounded-full border border-gray-700">
+            <span class="heading-font text-base font-bold tracking-wider uppercase">THE NEST DNA</span>
+          </div>
+        </div>
+
+        <!-- Scrollable Navigation Items -->
+        <div class="flex flex-col flex-1 overflow-y-auto pt-5 pb-4">
+          <nav class="flex-1 px-3 space-y-1">
+            
+            <a href="#" onclick="navigateTo('dashboard')" data-view="dashboard" class="sidebar-link flex items-center px-4 py-3 text-sm rounded-lg transition-colors group">
+              <i class="fas fa-chart-line w-6 text-indigo-400"></i>
+              หน้าหลัก (Dashboard)
+            </a>
+
+            <a href="#" onclick="navigateTo('customers')" data-view="customers" class="sidebar-link flex items-center px-4 py-3 text-sm rounded-lg transition-colors group">
+              <i class="fas fa-users w-6 text-indigo-400"></i>
+              ลงทะเบียนลูกค้า
+            </a>
+
+            <a href="#" onclick="navigateTo('samples')" data-view="samples" class="sidebar-link flex items-center px-4 py-3 text-sm rounded-lg transition-colors group">
+              <i class="fas fa-flask w-6 text-indigo-400"></i>
+              ลงทะเบียนตัวอย่างนก
+            </a>
+
+            <a href="#" onclick="navigateTo('receipts')" data-view="receipts" class="sidebar-link flex items-center px-4 py-3 text-sm rounded-lg transition-colors group">
+              <i class="fas fa-receipt w-6 text-indigo-400"></i>
+              การออกใบเสร็จรับเงิน
+            </a>
+
+            <a href="#" onclick="navigateTo('quotations')" data-view="quotations" class="sidebar-link flex items-center px-4 py-3 text-sm rounded-lg transition-colors group">
+              <i class="fas fa-file-invoice w-6 text-indigo-400"></i>
+              การออกใบเสนอราคา
+            </a>
+
+            <a href="#" onclick="navigateTo('finance')" data-view="finance" class="sidebar-link flex items-center px-4 py-3 text-sm rounded-lg transition-colors group">
+              <i class="fas fa-calculator w-6 text-indigo-400"></i>
+              การเงิน รายรับ-รายจ่าย
+            </a>
+
+            <a href="#" onclick="navigateTo('reports')" data-view="reports" class="sidebar-link flex items-center px-4 py-3 text-sm rounded-lg transition-colors group">
+              <i class="fas fa-calendar-day w-6 text-indigo-400"></i>
+              รายงานประจำวัน
+            </a>
+
+            <a href="#" onclick="navigateTo('profile')" data-view="profile" class="sidebar-link flex items-center px-4 py-3 text-sm rounded-lg transition-colors group">
+              <i class="fas fa-user-cog w-6 text-indigo-400"></i>
+              โปรไฟล์ & คลาวด์ซิงค์
+            </a>
+
+            <a href="#" id="sidebar-admin-link" onclick="navigateTo('admins')" data-view="admins" class="sidebar-link hidden flex items-center px-4 py-3 text-sm rounded-lg transition-colors group">
+              <i class="fas fa-user-shield w-6 text-indigo-400"></i>
+              แต่งตั้งเจ้าหน้าที่รายใหม่
+            </a>
+
+          </nav>
+        </div>
+
+        <!-- User Information Footer Profile -->
+        <div class="flex-shrink-0 flex bg-[#090d16] p-4 border-t border-gray-800">
+          <div class="flex items-center">
+            <div class="w-9 h-9 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold">
+              U
+            </div>
+            <div class="ml-3">
+              <p id="user-name-display" class="text-sm font-bold text-gray-200">Name</p>
+              <p id="user-role-display" class="text-xs text-gray-400">Role</p>
+            </div>
+          </div>
+          <button onclick="handleLogout()" title="ออกจากระบบ" class="ml-auto text-gray-400 hover:text-red-400 p-2">
+            <i class="fas fa-sign-out-alt text-lg"></i>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Content Workspace Area -->
+    <main class="flex-1 flex flex-col overflow-y-auto">
+      
+      <!-- Top Action Bar (Header) -->
+      <header class="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-6 dark:bg-slate-900 dark:border-slate-800">
+        <div class="flex items-center">
+          <button class="md:hidden text-gray-500 mr-4 focus:outline-none">
+            <i class="fas fa-bars text-xl"></i>
+          </button>
+          <h2 class="heading-font text-lg font-bold text-gray-900 dark:text-white">ศูนย์จัดการข้อมูล "THE NEST DNA"</h2>
+        </div>
+
+        <div class="flex items-center space-x-4">
+          <!-- Toggle Dark Mode -->
+          <button onclick="document.documentElement.classList.toggle('dark')" class="p-2 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
+            <i class="fas fa-moon text-lg"></i>
+          </button>
+          <div class="h-6 w-[1px] bg-gray-200 dark:bg-gray-800"></div>
+          <div class="flex items-center text-sm font-semibold">
+            <span class="w-2.5 h-2.5 bg-green-500 rounded-full mr-2"></span>
+            เชื่อมต่อข้อมูลภายในเครื่อง (Local Sandbox)
+          </div>
+        </div>
+      </header>
+
+      <!-- Dynamic Page Panels Inside Main -->
+      <div class="p-6 md:p-8 flex-1">
+
+        <!-- ========================== -->
+        <!-- VIEW: DASHBOARD (หน้าหลัก) -->
+        <!-- ========================== -->
+        <div id="dashboard-view" class="hidden space-y-6">
+          <div class="flex justify-between items-center">
+            <h2 class="heading-font text-2xl font-extrabold tracking-tight">ภาพรวมกิจกรรมระบบควบคุมงาน</h2>
+            <span class="text-sm font-semibold bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-lg dark:bg-indigo-950 dark:text-indigo-300 flex items-center">
+              <i class="far fa-calendar-alt mr-2"></i>ข้อมูลรายวัน (วันนี้)
+            </span>
+          </div>
+
+          <!-- Dynamic Alert Banner for Empty Birds Today -->
+          <div id="dash-alert-banner" class="hidden"></div>
+          
+          <!-- Grid Stats Cards -->
+          <div class="grid grid-cols-1 gap-5 sm:grid-cols-3">
+            
+            <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-200 dark:bg-gray-800 dark:border-gray-700 flex items-center">
+              <div class="p-3 bg-blue-100 text-blue-600 rounded-lg dark:bg-blue-900/30 dark:text-blue-400">
+                <i class="fas fa-users text-2xl"></i>
+              </div>
+              <div class="ml-4">
+                <p class="text-sm font-medium text-gray-500 dark:text-gray-400">ลูกค้าลงทะเบียนวันนี้</p>
+                <p id="dash-total-customers" class="text-2xl font-bold heading-font">0</p>
+              </div>
+            </div>
+
+            <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-200 dark:bg-gray-800 dark:border-gray-700 flex items-center">
+              <div class="p-3 bg-indigo-100 text-indigo-600 rounded-lg dark:bg-indigo-900/30 dark:text-indigo-400">
+                <i class="fas fa-dove text-2xl"></i>
+              </div>
+              <div class="ml-4">
+                <p class="text-sm font-medium text-gray-500 dark:text-gray-400">รับตัวอย่างนกวันนี้</p>
+                <p id="dash-total-birds" class="text-2xl font-bold heading-font">0</p>
+              </div>
+            </div>
+
+            <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-200 dark:bg-gray-800 dark:border-gray-700 flex items-center">
+              <div class="p-3 bg-green-100 text-green-600 rounded-lg dark:bg-green-900/30 dark:text-green-400">
+                <i class="fas fa-check-circle text-2xl"></i>
+              </div>
+              <div class="ml-4">
+                <p class="text-sm font-medium text-gray-500 dark:text-gray-400">อัตราการวิเคราะห์เสร็จวันนี้</p>
+                <p id="dash-verified-percentage" class="text-2xl font-bold heading-font">0%</p>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Charts Grid Section -->
+          <div id="dash-charts-section" class="grid grid-cols-1 gap-6">
+            <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-200 dark:bg-gray-800 dark:border-gray-700 max-w-2xl mx-auto w-full">
+              <h3 class="font-bold text-gray-700 dark:text-gray-300 mb-4 text-center">สัดส่วนสายพันธุ์ตัวอย่างนกวันนี้</h3>
+              <div class="relative h-72">
+                <canvas id="breedChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Samples Table -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 dark:bg-gray-800 dark:border-gray-700 overflow-hidden mb-6">
+            <div class="p-5 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center">
+              <h3 class="font-bold text-gray-900 dark:text-white">ตัวอย่างนกที่ลงทะเบียนวันนี้</h3>
+              <button onclick="navigateTo('samples')" class="text-indigo-600 hover:underline text-sm font-semibold">ดูทะเบียนนกทั้งหมด</button>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-sm text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                  <tr>
+                    <th scope="col" class="px-6 py-3">รหัสนกตัวอย่าง</th>
+                    <th scope="col" class="px-6 py-3">สายพันธุ์</th>
+                    <th scope="col" class="px-6 py-3">เพศ</th>
+                    <th scope="col" class="px-6 py-3">เจ้าของ</th>
+                    <th scope="col" class="px-6 py-3">สถานะ</th>
+                  </tr>
+                </thead>
+                <tbody id="dash-recent-birds-tbody">
+                  <!-- Javascript dynamic load -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Document Export Logs Table -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 dark:bg-gray-800 dark:border-gray-700 overflow-hidden">
+            <div class="p-5 border-b border-gray-100 dark:border-gray-700">
+              <h3 class="font-bold text-gray-900 dark:text-white">ประวัติการพิมพ์และดาวน์โหลดเอกสารล่าสุด</h3>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-sm text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                  <tr>
+                    <th scope="col" class="px-6 py-3">วัน-เวลา</th>
+                    <th scope="col" class="px-6 py-3">ผู้ดำเนินการ</th>
+                    <th scope="col" class="px-6 py-3">เลขที่เอกสาร</th>
+                    <th scope="col" class="px-6 py-3">ประเภทเอกสาร</th>
+                    <th scope="col" class="px-6 py-3">การดำเนินการ</th>
+                  </tr>
+                </thead>
+                <tbody id="dash-export-logs-tbody">
+                  <!-- Javascript dynamic load -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================== -->
+        <!-- VIEW: CUSTOMERS (ลงทะเบียนลูกค้า) -->
+        <!-- ========================== -->
+        <div id="customers-view" class="hidden space-y-6">
+          <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+            <div>
+              <h2 class="heading-font text-2xl font-extrabold tracking-tight">ลงทะเบียนลูกค้า</h2>
+              <p class="text-sm text-gray-400 mt-1">บริหารจัดการข้อมูลผู้ส่งตรวจวิเคราะห์ตัวอย่างสัตว์ (ข้อมูลตาราง)</p>
+            </div>
+            <button id="customer-add-btn" onclick="openAddCustomerModal()" class="mt-4 md:mt-0 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-5 rounded-lg shadow-md transition-all">
+              <i class="fas fa-plus mr-2"></i>เพิ่มข้อมูลลูกค้าใหม่
+            </button>
+          </div>
+
+          <!-- Filter & Search toolbar -->
+          <div class="flex flex-wrap gap-4 bg-white p-4 rounded-xl border border-gray-200 dark:bg-gray-800 dark:border-gray-700 items-center justify-between">
+            <div class="flex-1 min-w-[200px] relative">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                <i class="fas fa-search"></i>
+              </span>
+              <input type="text" id="search-customer-input" oninput="renderCustomersList()" placeholder="ค้นหาด้วย ชื่อลูกค้า, รหัส, เบอร์โทร..." class="w-full pl-10 pr-4 py-2 border rounded-lg dark:bg-gray-900 dark:border-gray-700 dark:text-white">
+            </div>
+            <div class="flex flex-wrap gap-3 items-center">
+              <select id="filter-customer-type" onchange="renderCustomersList()" class="p-2 border rounded-lg dark:bg-gray-900 dark:border-gray-700 dark:text-white">
+                <option value="">ทั้งหมด (ประเภท)</option>
+                <option value="สำนักงานใหญ่">สำนักงานใหญ่</option>
+                <option value="สาขา">สาขา</option>
+              </select>
+              <div class="flex items-center gap-1">
+                <span class="text-xs text-gray-400">วันที่ลงทะเบียน:</span>
+                <input type="date" id="filter-customer-date" onchange="renderCustomersList()" class="p-2 border rounded-lg dark:bg-gray-900 dark:border-gray-700 dark:text-white text-xs">
+                <button onclick="document.getElementById('filter-customer-date').value = ''; renderCustomersList();" class="text-xs text-red-500 hover:underline">ล้าง</button>
+              </div>
+              <div class="flex items-center gap-1">
+                <span class="text-xs text-gray-400">จำนวน:</span>
+                <select id="limit-customer-rows" onchange="renderCustomersList()" class="p-2 border rounded-lg dark:bg-gray-900 dark:border-gray-700 dark:text-white text-xs">
+                  <option value="10">10 แถว</option>
+                  <option value="30" selected>30 แถว</option>
+                  <option value="50">50 แถว</option>
+                  <option value="999999">ทั้งหมด</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Customers Table Grid -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 dark:bg-gray-800 dark:border-gray-700 overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-sm text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                  <tr>
+                    <th class="px-6 py-3">รหัสลูกค้า</th>
+                    <th class="px-6 py-3">ชื่อลูกค้า</th>
+                    <th class="px-6 py-3">เบอร์โทรศัพท์</th>
+                    <th class="px-6 py-3">อีเมล / ข้อมูลติดต่อ</th>
+                    <th class="px-6 py-3">ประเภท</th>
+                    <th class="px-6 py-3 text-center">นกทั้งหมด</th>
+                    <th class="px-6 py-3 text-center">การจัดการ</th>
+                  </tr>
+                </thead>
+                <tbody id="customers-list-tbody">
+                  <!-- Dynamic content load -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================== -->
+        <!-- VIEW: SAMPLES (ลงทะเบียนตัวอย่างนก) -->
+        <!-- ========================== -->
+        <div id="samples-view" class="hidden space-y-6">
+          <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+            <div>
+              <h2 class="heading-font text-2xl font-extrabold tracking-tight">ทะเบียนนกตัวอย่าง</h2>
+              <p class="text-sm text-gray-400 mt-1">บริหารจัดการผลตรวจยืนยันสายพันธุ์และเพศนกผ่านห้องปฏิบัติการ (ข้อมูลตาราง)</p>
+            </div>
+            <div class="flex space-x-3 mt-4 md:mt-0">
+              <button onclick="openSelectedBirdsSummary()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-4 rounded-lg shadow-md transition-all">
+                <i class="fas fa-file-alt mr-2"></i>พิมพ์ใบสรุปผลตรวจ
+              </button>
+              <button onclick="openSelectedBirdsPreview()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-4 rounded-lg shadow-md transition-all">
+                <i class="fas fa-envelope mr-2"></i>ส่งพิมพ์จดหมาย
+              </button>
+              <button id="sample-add-btn" onclick="openAddBirdModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-5 rounded-lg shadow-md transition-all">
+                <i class="fas fa-plus mr-2"></i>ลงทะเบียนตัวอย่างนกใหม่
+              </button>
+            </div>
+          </div>
+
+          <!-- Filters bar -->
+          <div class="flex flex-wrap gap-4 bg-white p-4 rounded-xl border border-gray-200 dark:bg-gray-800 dark:border-gray-700 items-center justify-between">
+            <div class="flex-1 min-w-[200px] relative">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                <i class="fas fa-search"></i>
+              </span>
+              <input type="text" id="search-bird-input" oninput="renderSamplesList()" placeholder="ค้นหารหัสนกตัวอย่าง, สายพันธุ์, หรือเจ้าของ..." class="w-full pl-10 pr-4 py-2 border rounded-lg dark:bg-gray-900 dark:border-gray-700 dark:text-white">
+            </div>
+            <div class="flex flex-wrap gap-3 items-center">
+              <select id="filter-bird-sex" onchange="renderSamplesList()" class="p-2 border rounded-lg dark:bg-gray-900 dark:border-gray-700 dark:text-white">
+                <option value="">เพศทั้งหมด</option>
+                <option value="Male">ตัวผู้ (Male)</option>
+                <option value="Female">ตัวเมีย (Female)</option>
+                <option value="Unknown">รอตรวจ</option>
+              </select>
+              <select id="filter-bird-status" onchange="renderSamplesList()" class="p-2 border rounded-lg dark:bg-gray-900 dark:border-gray-700 dark:text-white">
+                <option value="">สถานะทั้งหมด</option>
+                <option value="รอผลตรวจ">รอผลตรวจ</option>
+                <option value="การตรวจเสร็จสิ้น">ตรวจเสร็จสิ้น</option>
+              </select>
+              <div class="flex items-center gap-1">
+                <span class="text-xs text-gray-400">วันที่ลงทะเบียน:</span>
+                <input type="date" id="filter-bird-date" onchange="renderSamplesList()" class="p-2 border rounded-lg dark:bg-gray-900 dark:border-gray-700 dark:text-white text-xs">
+                <button onclick="document.getElementById('filter-bird-date').value = ''; renderSamplesList();" class="text-xs text-red-500 hover:underline">ล้าง</button>
+              </div>
+              <div class="flex items-center gap-1">
+                <span class="text-xs text-gray-400">จำนวน:</span>
+                <select id="limit-bird-rows" onchange="renderSamplesList()" class="p-2 border rounded-lg dark:bg-gray-900 dark:border-gray-700 dark:text-white text-xs">
+                  <option value="10">10 แถว</option>
+                  <option value="30" selected>30 แถว</option>
+                  <option value="50">50 แถว</option>
+                  <option value="999999">ทั้งหมด</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Birds Table Grid -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 dark:bg-gray-800 dark:border-gray-700 overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-sm text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                  <tr>
+                    <th class="px-4 py-3 text-center w-12">
+                      <input type="checkbox" id="select-all-birds" onclick="toggleSelectAllBirds(this)" class="w-4 h-4 text-indigo-600 rounded">
+                    </th>
+                    <th class="px-4 py-3">รหัสนกตัวอย่าง</th>
+                    <th class="px-4 py-3">สายพันธุ์</th>
+                    <th class="px-4 py-3">รหัสห่วงขา (Ring ID)</th>
+                    <th class="px-4 py-3">ประเภทตัวอย่าง</th>
+                    <th class="px-4 py-3">สี</th>
+                    <th class="px-4 py-3">เพศผลวิเคราะห์</th>
+                    <th class="px-4 py-3">เจ้าของ</th>
+                    <th class="px-4 py-3">สถานะ</th>
+                    <th class="px-4 py-3 text-center">การจัดการ</th>
+                  </tr>
+                </thead>
+                <tbody id="samples-list-tbody">
+                  <!-- Dynamic content load -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================== -->
+        <!-- VIEW: RECEIPTS (ออกใบเสร็จรับเงิน) -->
+        <!-- ========================== -->
+        <div id="receipts-view" class="hidden space-y-6">
+          <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+            <div>
+              <h2 class="heading-font text-2xl font-extrabold tracking-tight">การออกใบเสร็จรับเงิน</h2>
+              <p class="text-sm text-gray-400 mt-1">ทะเบียนออกใบเสร็จรับเงิน ค่าบริการวิเคราะห์ผลแล็บ</p>
+            </div>
+            <button id="create-receipt-btn" onclick="openCreateDocModal('Receipt')" class="mt-4 md:mt-0 bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 px-4 rounded-lg shadow-md transition-all">
+              <i class="fas fa-receipt mr-2"></i>สร้างใบเสร็จรับเงิน
+            </button>
+          </div>
+
+          <!-- Toolbar filter -->
+          <div class="flex flex-wrap gap-4 bg-white p-4 rounded-xl border border-gray-200 dark:bg-gray-800 dark:border-gray-700 items-center justify-between">
+            <div class="flex-1 min-w-[200px] relative">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                <i class="fas fa-search"></i>
+              </span>
+              <input type="text" id="search-receipt-input" oninput="renderReceiptsList()" placeholder="ค้นหารหัสเอกสาร (IVC-xxxx) หรือรหัสลูกค้า..." class="w-full pl-10 pr-4 py-2 border rounded-lg dark:bg-gray-900 dark:border-gray-700 dark:text-white">
+            </div>
+            <div class="flex flex-wrap gap-3 items-center">
+              <div class="flex items-center gap-1">
+                <span class="text-xs text-gray-400">วันที่เอกสาร:</span>
+                <input type="date" id="filter-receipt-date" onchange="renderReceiptsList()" class="p-2 border rounded-lg dark:bg-gray-900 dark:border-gray-700 dark:text-white text-xs">
+                <button onclick="document.getElementById('filter-receipt-date').value = ''; renderReceiptsList();" class="text-xs text-red-500 hover:underline">ล้าง</button>
+              </div>
+              <div class="flex items-center gap-1">
+                <span class="text-xs text-gray-400">จำนวน:</span>
+                <select id="limit-receipt-rows" onchange="renderReceiptsList()" class="p-2 border rounded-lg dark:bg-gray-900 dark:border-gray-700 dark:text-white text-xs">
+                  <option value="10">10 แถว</option>
+                  <option value="30" selected>30 แถว</option>
+                  <option value="50">50 แถว</option>
+                  <option value="999999">ทั้งหมด</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Receipts Table -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 dark:bg-gray-800 dark:border-gray-700 overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-sm text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                  <tr>
+                    <th class="px-6 py-3">เลขที่เอกสาร</th>
+                    <th class="px-6 py-3">วันที่ทำรายการ</th>
+                    <th class="px-6 py-3">ชื่อลูกค้า / รหัส</th>
+                    <th class="px-6 py-3 text-right">ยอดรวมสุทธิ</th>
+                    <th class="px-6 py-3 text-center">สถานะ</th>
+                    <th class="px-6 py-3 text-center">การจัดการ</th>
+                  </tr>
+                </thead>
+                <tbody id="receipts-list-tbody">
+                  <!-- Dynamic content load -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================== -->
+        <!-- VIEW: QUOTATIONS (ออกใบเสนอราคา) -->
+        <!-- ========================== -->
+        <div id="quotations-view" class="hidden space-y-6">
+          <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+            <div>
+              <h2 class="heading-font text-2xl font-extrabold tracking-tight">การออกใบเสนอราคา</h2>
+              <p class="text-sm text-gray-400 mt-1">ทะเบียนออกใบเสนอราคาประเมินค่าบริการ</p>
+            </div>
+            <button id="create-quotation-btn" onclick="openCreateDocModal('Quotation')" class="mt-4 md:mt-0 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-4 rounded-lg shadow-md transition-all">
+              <i class="fas fa-file-invoice mr-2"></i>สร้างใบเสนอราคา
+            </button>
+          </div>
+
+          <!-- Toolbar filter -->
+          <div class="flex flex-wrap gap-4 bg-white p-4 rounded-xl border border-gray-200 dark:bg-gray-800 dark:border-gray-700 items-center justify-between">
+            <div class="flex-1 min-w-[200px] relative">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                <i class="fas fa-search"></i>
+              </span>
+              <input type="text" id="search-quotation-input" oninput="renderQuotationsList()" placeholder="ค้นหารหัสเอกสาร (QT-xxxx) หรือรหัสลูกค้า..." class="w-full pl-10 pr-4 py-2 border rounded-lg dark:bg-gray-900 dark:border-gray-700 dark:text-white">
+            </div>
+            <div class="flex flex-wrap gap-3 items-center">
+              <div class="flex items-center gap-1">
+                <span class="text-xs text-gray-400">วันที่เอกสาร:</span>
+                <input type="date" id="filter-quotation-date" onchange="renderQuotationsList()" class="p-2 border rounded-lg dark:bg-gray-900 dark:border-gray-700 dark:text-white text-xs">
+                <button onclick="document.getElementById('filter-quotation-date').value = ''; renderQuotationsList();" class="text-xs text-red-500 hover:underline">ล้าง</button>
+              </div>
+              <div class="flex items-center gap-1">
+                <span class="text-xs text-gray-400">จำนวน:</span>
+                <select id="limit-quotation-rows" onchange="renderQuotationsList()" class="p-2 border rounded-lg dark:bg-gray-900 dark:border-gray-700 dark:text-white text-xs">
+                  <option value="10">10 แถว</option>
+                  <option value="30" selected>30 แถว</option>
+                  <option value="50">50 แถว</option>
+                  <option value="999999">ทั้งหมด</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quotations Table -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 dark:bg-gray-800 dark:border-gray-700 overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-sm text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                  <tr>
+                    <th class="px-6 py-3">เลขที่เอกสาร</th>
+                    <th class="px-6 py-3">วันที่ทำรายการ</th>
+                    <th class="px-6 py-3">ชื่อลูกค้า / รหัส</th>
+                    <th class="px-6 py-3 text-right">ยอดรวมสุทธิ</th>
+                    <th class="px-6 py-3 text-center">สถานะ</th>
+                    <th class="px-6 py-3 text-center">การจัดการ</th>
+                  </tr>
+                </thead>
+                <tbody id="quotations-list-tbody">
+                  <!-- Dynamic content load -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================== -->
+        <!-- VIEW: FINANCE (การเงิน รายรับ-รายจ่าย) -->
+        <!-- ========================== -->
+        <div id="finance-view" class="hidden space-y-6">
+          <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+            <div>
+              <h2 class="heading-font text-2xl font-extrabold tracking-tight">การบันทึกงบประมาณและบัญชี</h2>
+              <p class="text-sm text-gray-400 mt-1">รายงานสรุปรายรับจากการออกบิล และบันทึกบัญชีรายจ่ายการปฏิบัติงาน</p>
+            </div>
+            <button onclick="openAddExpenseModal()" class="mt-4 md:mt-0 bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 px-5 rounded-lg shadow-md transition-all">
+              <i class="fas fa-minus-circle mr-2"></i>บันทึกรายการจ่ายเงิน
+            </button>
+          </div>
+
+          <!-- Finance Stats Row -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white p-6 rounded-xl border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+              <span class="text-xs font-semibold text-gray-400 uppercase">รายรับสะสมทั้งหมด</span>
+              <p id="fin-total-income" class="text-2xl font-extrabold text-green-600 dark:text-green-400 heading-font mt-2">฿0</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+              <span class="text-xs font-semibold text-gray-400 uppercase">รายจ่ายสะสมทั้งหมด</span>
+              <p id="fin-total-expense" class="text-2xl font-extrabold text-red-600 dark:text-red-400 heading-font mt-2">฿0</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+              <span class="text-xs font-semibold text-gray-400 uppercase">ดุลกำไรสุทธิการดำเนินงาน</span>
+              <p id="fin-net-profit" class="text-2xl font-extrabold mt-2 heading-font">฿0</p>
+            </div>
+          </div>
+
+          <!-- Transactions Log Table -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 dark:bg-gray-800 dark:border-gray-700 overflow-hidden">
+            <div class="p-5 border-b border-gray-100 dark:border-gray-700">
+              <h3 class="font-bold text-gray-900 dark:text-white">สมุดบันทึกรายการบัญชี (Financial Ledger Log)</h3>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-sm text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                  <tr>
+                    <th class="px-6 py-3">เลขที่อ้างอิง</th>
+                    <th class="px-6 py-3">วันที่บันทึก</th>
+                    <th class="px-6 py-3">รายละเอียดธุรกรรม</th>
+                    <th class="px-6 py-3 text-right">รายรับ (Income)</th>
+                    <th class="px-6 py-3 text-right">รายจ่าย (Expense)</th>
+                  </tr>
+                </thead>
+                <tbody id="fin-transactions-tbody">
+                  <!-- Dynamic content load -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================== -->
+        <!-- VIEW: DAILY REPORT (รายงานประจำวัน) -->
+        <!-- ========================== -->
+        <div id="reports-view" class="hidden space-y-6">
+          <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+            <div>
+              <h2 class="heading-font text-2xl font-extrabold tracking-tight">รายงานด่วนประจำวัน</h2>
+              <p class="text-sm text-gray-400 mt-1">เรียกรายงานวิเคราะห์กิจกรรมเพื่อสรุปส่งผู้บริหาร</p>
+            </div>
+            <div class="flex items-center space-x-3 mt-4 md:mt-0">
+              <label class="text-sm text-gray-500">เลือกวันที่รายงาน:</label>
+              <input type="date" id="report-date-picker" onchange="renderReports()" class="p-2 border rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:text-white">
+            </div>
+          </div>
+
+          <!-- report sheet card wrapper -->
+          <div id="reports-container">
+            <!-- JavaScript dynamically renders template details here -->
+          </div>
+        </div>
+
+        <!-- ========================== -->
+        <!-- VIEW: PROFILE & SETTINGS (ตั้งค่าคลาวด์) -->
+        <!-- ========================== -->
+        <div id="profile-view" class="hidden space-y-6">
+          <h2 class="heading-font text-2xl font-extrabold tracking-tight">ตั้งค่าโปรไฟล์ผู้ใช้และการเชื่อมต่อ Google Sheets</h2>
+          
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            
+            <!-- User Passwords edit card -->
+            <div class="bg-white p-6 rounded-xl border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+              <h3 class="font-bold text-gray-900 dark:text-white mb-4"><i class="fas fa-user-edit mr-2 text-indigo-500"></i>ข้อมูลโปรไฟล์ส่วนบุคคล</h3>
+              
+              <form onsubmit="event.preventDefault(); handleProfileUpdateSubmit();" class="space-y-4">
+                <div>
+                  <label class="block text-xs font-semibold mb-1 text-gray-500">ชื่อผู้แสดงผล / Display Name</label>
+                  <input type="text" id="prof-name-input" required class="w-full text-sm p-3 border rounded-lg dark:bg-gray-900 dark:border-gray-700 dark:text-white">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold mb-1 text-gray-500">รหัสผ่านเดิม (กรอกเพื่อทำการเปลี่ยนรหัสผ่าน)</label>
+                  <input type="password" id="prof-old-pass" class="w-full text-sm p-3 border rounded-lg dark:bg-gray-900 dark:border-gray-700 dark:text-white">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold mb-1 text-gray-500">รหัสผ่านใหม่</label>
+                  <input type="password" id="prof-new-pass" class="w-full text-sm p-3 border rounded-lg dark:bg-gray-900 dark:border-gray-700 dark:text-white">
+                </div>
+                
+                <button type="submit" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg shadow-sm">
+                  บันทึกข้อมูลส่วนตัว
+                </button>
+              </form>
+            </div>
+
+            <!-- Sync configuration settings -->
+            <div class="bg-white p-6 rounded-xl border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+              <h3 class="font-bold text-gray-900 dark:text-white mb-4"><i class="fas fa-cloud-upload-alt mr-2 text-indigo-500"></i>ตั้งค่า Google Sheets API Sync</h3>
+              
+              <form onsubmit="event.preventDefault(); saveCloudSettingsSubmit();" class="space-y-4">
+                <div>
+                  <label class="block text-xs font-semibold mb-1 text-gray-500">Google Sheet ID</label>
+                  <input type="text" id="settings-sheet-id" placeholder="กรอก Google Sheet ID" class="w-full text-sm p-3 border rounded-lg dark:bg-gray-900 dark:border-gray-700 dark:text-white">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold mb-1 text-gray-500">Google Apps Script Web App URL</label>
+                  <input type="url" id="settings-gas-url" placeholder="https://script.google.com/macros/s/..." class="w-full text-sm p-3 border rounded-lg dark:bg-gray-900 dark:border-gray-700 dark:text-white">
+                </div>
+                
+                <div class="flex items-center space-x-3 pt-2">
+                  <input type="checkbox" id="settings-sync-enabled" class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                  <label for="settings-sync-enabled" class="text-sm font-semibold text-gray-700 dark:text-gray-300">เปิดระบบประสานข้อมูลขึ้นคลาวด์อัตโนมัติ (Google Sheets API Sync)</label>
+                </div>
+
+                <div class="border-t border-gray-100 dark:border-gray-700 pt-4 mt-4 flex justify-between space-x-2">
+                  <button type="button" onclick="fetchFromGoogleSheets()" class="flex-1 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold rounded-lg border dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white dark:border-gray-600">
+                    <i class="fas fa-sync mr-1"></i> ซิงค์ดึงข้อมูลทันที
+                  </button>
+                  <button type="submit" class="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg shadow-sm">
+                    บันทึกการซิงค์
+                  </button>
+                </div>
+              </form>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ========================== -->
+        <!-- VIEW: ADMINS (จัดการแอดมินสิทธิ์) -->
+        <!-- ========================== -->
+        <div id="admins-view" class="hidden space-y-6">
+          <h2 class="heading-font text-2xl font-extrabold tracking-tight">แต่งตั้งเจ้าหน้าที่รายใหม่</h2>
+          
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- List of existing staff and options to change tier -->
+            <div class="lg:col-span-2 space-y-3 bg-white p-6 rounded-xl border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+              <h3 class="font-bold text-gray-900 dark:text-white mb-4">รายชื่อบัญชีเจ้าหน้าที่ระบบ The Nest</h3>
+              <div id="admins-list-container" class="divide-y divide-gray-100 dark:divide-gray-700">
+                <!-- Javascript loaded list -->
+              </div>
+            </div>
+
+            <!-- Create new staff user -->
+            <div id="add-admin-form-panel" class="bg-white p-6 rounded-xl border border-gray-200 dark:bg-gray-800 dark:border-gray-700 h-fit">
+              <h3 class="font-bold text-gray-900 dark:text-white mb-4"><i class="fas fa-user-plus mr-2 text-indigo-500"></i>แต่งตั้งเจ้าหน้าที่ระบบรายใหม่</h3>
+              
+              <form onsubmit="event.preventDefault(); handleAddAdminSubmit();" class="space-y-4">
+                <div>
+                  <label class="block text-xs font-semibold mb-1 text-gray-500">ชื่อ-นามสกุล *</label>
+                  <input type="text" id="admin-new-name" required placeholder="ชื่อเจ้าหน้าที่" class="w-full text-sm p-3 border rounded-lg dark:bg-gray-900 dark:border-gray-700 dark:text-white">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold mb-1 text-gray-500">ชื่อบัญชี User ID *</label>
+                  <input type="text" id="admin-new-userid" required placeholder="ภาษาอังกฤษพิมพ์เล็ก" class="w-full text-sm p-3 border rounded-lg dark:bg-gray-900 dark:border-gray-700 dark:text-white">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold mb-1 text-gray-500">รหัสผ่านเริ่มต้น *</label>
+                  <input type="password" id="admin-new-password" required placeholder="อย่างน้อย 4 ตัวขึ้นไป" class="w-full text-sm p-3 border rounded-lg dark:bg-gray-900 dark:border-gray-700 dark:text-white">
+                </div>
+
+                
+                <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg shadow-md transition-all">
+                  สร้างเจ้าหน้าที่ระบบใหม่
+                </button>
+              </form>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ========================== -->
+        <!-- VIEW: CERTIFICATE PREVIEW (ใบรับรองเพศ) -->
+        <!-- ========================== -->
+        <div id="cert-preview-view" class="hidden space-y-6 max-w-4xl mx-auto">
+          <div class="flex justify-between items-center no-print">
+            <button onclick="navigateTo('samples')" class="text-sm font-semibold text-gray-600 hover:underline"><i class="fas fa-chevron-left mr-1"></i>กลับไปหน้าระเบียนนก</button>
+            <div class="flex space-x-3">
+              <button onclick="downloadCertificatePDF()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 px-5 rounded-lg shadow-md transition-all">
+                <i class="fas fa-file-pdf mr-2"></i>ดาวน์โหลด PDF
+              </button>
+              <button onclick="printCertificateDocument()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-5 rounded-lg shadow-md transition-all">
+                <i class="fas fa-print mr-2"></i>พิมพ์ใบรับรองผลตรวจ (Letter Size)
+              </button>
+            </div>
+          </div>
+
+          <!-- Printable Certificate Page Structure (15x10 cm Landscape) -->
+          <div class="mx-auto bg-white shadow-xl border border-gray-300 dark:border-gray-700 p-2 cert-paper">
+            
+            <!-- Outer Double Borders -->
+            <div class="h-full w-full border-2 border-[#1e3b8a] p-0.5">
+              <div class="h-full w-full border border-gray-300 p-3 flex flex-col justify-between">
+                
+                <!-- Logo & Headers in Flex Row (Saves vertical space) -->
+                <div class="flex justify-between items-center border-b border-gray-200 pb-1.5">
+                  <div class="flex items-center space-x-2">
+                    <img src="logo.jpg" class="w-8 h-8 rounded-full border border-blue-900 shadow-sm">
+                    <div>
+                      <h1 class="heading-font text-xs font-extrabold text-blue-950 tracking-wide">บริษัท เดอะเนสท์ ดีเอ็นเอ จำกัด</h1>
+                      <p class="text-[8px] text-blue-900 font-semibold uppercase tracking-wider">THE NEST DNA CO.,LTD</p>
+                    </div>
+                  </div>
+                  <div class="text-right text-[8px] text-gray-500 font-mono">
+                    <div>Cert No: <span id="cert-no" class="font-bold text-gray-700">CER-2026-0001</span></div>
+                    <div>Date: <span id="cert-date" class="font-bold text-gray-700">30 พฤษภาคม 2569</span></div>
+                  </div>
+                </div>
+
+                <!-- Title -->
+                <div class="text-center my-1">
+                  <h2 class="heading-font text-xs font-bold text-gray-900 tracking-wider">CERTIFICATE OF DIAGNOSIS (Avian DNA Sex Analysis)</h2>
+                </div>
+
+                <!-- Main Specimen Details Table (No Owner details) -->
+                <div class="my-2 text-slate-800 dark:text-slate-200">
+                  <table class="w-full text-left border-collapse text-[10px]">
+                    <tbody>
+                      <tr class="border-b border-slate-100 dark:border-slate-800">
+                        <td class="py-1.5 font-bold text-blue-900 dark:text-blue-400 w-2/5">Sample ID (รหัสตัวอย่างนก) :</td>
+                        <td id="cert-sample-id-display" class="py-1.5 font-mono font-bold text-slate-900 dark:text-white">-</td>
+                      </tr>
+                      <tr class="border-b border-slate-100 dark:border-slate-800">
+                        <td class="py-1.5 font-bold text-blue-900 dark:text-blue-400">Bird ID (รหัสห่วงขา) :</td>
+                        <td id="cert-bird-ring-id" class="py-1.5 font-mono text-slate-900 dark:text-white">-</td>
+                      </tr>
+                      <tr class="border-b border-slate-100 dark:border-slate-800">
+                        <td class="py-1.5 font-bold text-blue-900 dark:text-blue-400">Species (สายพันธุ์) :</td>
+                        <td id="cert-bird-breed" class="py-1.5 font-semibold text-slate-900 dark:text-white">-</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <!-- Outcome Result -->
+                <div class="bg-gray-50 px-3 py-1.5 border rounded-lg dark:bg-gray-900/50 dark:border-gray-800 text-center my-1">
+                  <span class="text-[7px] uppercase text-gray-400 font-bold tracking-wider block">ผลการตรวจ (Result)</span>
+                  <div id="cert-sex-result" class="mt-0.5">
+                    <!-- Male/Female badge injected -->
+                  </div>
+                </div>
+
+                <!-- Bottom Footer Signatures -->
+                <div class="flex justify-between items-end text-[7px] text-gray-400">
+                  <div class="text-left font-mono">
+                    <p class="text-[7px] text-red-500 font-bold italic tracking-wide">only certificated by example</p>
+                    <p>Verification: Non-splicing Sanger DNA Method</p>
+                  </div>
+                  <div class="text-center w-36 relative">
+                    <div class="font-serif italic text-blue-900/40 text-xs absolute -top-4 left-1/2 transform -translate-x-1/2 select-none">NestLab</div>
+                    <div class="w-full h-[0.5px] bg-gray-400 mb-1"></div>
+                    <p class="font-bold text-gray-800"><span id="cert-sign-name">-</span></p>
+                    <p class="text-[6px] uppercase tracking-wider text-gray-400">Avian Inspector Specialist</p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ========================== -->
+        <!-- VIEW: RECEIPT PREVIEW (ใบเสร็จ/เสนอราคา) -->
+        <!-- ========================== -->
+        <div id="receipt-preview-view" class="hidden space-y-6 max-w-4xl mx-auto">
+          <div class="flex justify-between items-center no-print">
+            <button onclick="navigateTo('receipts')" class="text-sm font-semibold text-gray-600 hover:underline"><i class="fas fa-chevron-left mr-1"></i>กลับไปหน้าระเบียนบิล</button>
+            <div class="flex space-x-3">
+              <button onclick="downloadReceiptPDF()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 px-5 rounded-lg shadow-md transition-all">
+                <i class="fas fa-file-pdf mr-2"></i>ดาวน์โหลด PDF
+              </button>
+              <button onclick="printReceiptDocument()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-5 rounded-lg shadow-md transition-all">
+                <i class="fas fa-print mr-2"></i>พิมพ์เอกสาร (Receipt/Invoice PDF)
+              </button>
+            </div>
+          </div>
+
+          <!-- Invoice Printable Form Wrap -->
+          <div class="bg-white p-8 border border-gray-300 dark:border-gray-700 rounded-xl shadow-xl receipt-paper dark:bg-slate-900 dark:text-slate-100">
+            <div class="flex justify-between items-start border-b border-gray-200 dark:border-gray-800 pb-6">
+              <div class="flex items-center space-x-3">
+                <img src="logo.jpg" class="w-16 h-16 rounded-full border border-gray-200">
+                <div>
+                  <h1 class="heading-font text-lg font-extrabold text-slate-900 dark:text-white uppercase tracking-wide">บริษัท เดอะเนสท์ ดีเอ็นเอ จำกัด</h1>
+                  <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">THE NEST DNA CO.,LTD</p>
+                  <p class="text-xs text-gray-500 mt-1">951/15 ถนนพุทธมณฑลสาย 3 แขวงศาลาธรรมสพน์ เขตทวีวัฒนา กรุงเทพมหานคร 10170 | Tel: 02-123-4567</p>
+                  <p class="text-xs text-gray-500">เลขประจำตัวผู้เสียภาษี: 0105569035124</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <h2 id="print-doc-title" class="text-lg font-bold text-indigo-600 dark:text-indigo-400">ใบเสร็จรับเงิน (Receipt)</h2>
+                <div class="text-sm mt-2 text-gray-500">
+                  <p><strong>เลขที่ / Doc No:</strong> <span id="print-doc-number" class="font-mono text-slate-800 font-bold dark:text-white">IVC-YYYYMM-XXXX</span></p>
+                  <p class="mt-1"><strong>วันที่ / Date:</strong> <span id="print-doc-date">2026-05-30</span></p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Client Billing To Details -->
+            <div class="my-6">
+              <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">ลูกค้าผู้รับบิล / Bill To:</h3>
+              <div class="text-sm space-y-1">
+                <p class="font-bold text-slate-900 dark:text-white"><span id="print-cust-name">สมเกียรติ ยอดนก</span></p>
+                <p><span id="print-cust-address">123/45 ถ.สุขุมวิท เขตวัฒนา กรุงเทพฯ</span></p>
+                <p>โทรศัพท์: <span id="print-cust-phone">081-xxx-xx78</span> | อีเมล: <span id="print-cust-email">somkiat***@gmail.com</span></p>
+              </div>
+            </div>
+
+            <!-- Invoice Item Table -->
+            <div class="my-6">
+              <table class="w-full border-collapse">
+                <thead>
+                  <tr class="bg-slate-50 dark:bg-slate-800 text-xs font-bold text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-700">
+                    <th class="px-4 py-3 text-center w-12">ลำดับ</th>
+                    <th class="px-4 py-3 text-left">รายละเอียดสินค้า / รหัสตัวอย่าง</th>
+                    <th class="px-4 py-3 text-center w-24">จำนวน</th>
+                    <th class="px-4 py-3 text-right w-32">ราคาต่อหน่วย</th>
+                    <th class="px-4 py-3 text-right w-24">ส่วนลดต่อตัว</th>
+                    <th class="px-4 py-3 text-right w-32">จำนวนเงิน</th>
+                  </tr>
+                </thead>
+                <tbody id="print-items-tbody">
+                  <!-- JS Injected rows -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Summary Computations -->
+            <div class="flex justify-end mt-8 border-t border-gray-100 dark:border-gray-800 pt-4">
+              <div class="w-80 text-sm space-y-2">
+                <div class="flex justify-between text-gray-500">
+                  <span>รวมเป็นเงิน (Subtotal):</span>
+                  <span id="print-sum-subtotal">฿0</span>
+                </div>
+                <div class="flex justify-between text-red-500">
+                  <span>หักส่วนลดพิเศษ (Discount):</span>
+                  <span id="print-sum-discount">฿0</span>
+                </div>
+                <div class="flex justify-between text-lg font-bold text-slate-900 dark:text-white border-t border-double border-gray-300 dark:border-gray-700 pt-2">
+                  <span>ยอดสุทธิทั้งสิ้น (Net Total):</span>
+                  <span id="print-sum-total">฿0</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Signature block -->
+            <div id="print-footer-signatures" class="grid grid-cols-2 gap-8 mt-16 pt-8 border-t border-gray-100 dark:border-gray-800 text-center">
+              <div class="space-y-4" id="print-footer-col1">
+                <div class="w-48 h-[1px] bg-gray-400 mx-auto"></div>
+                <p class="text-xs text-gray-400" id="print-footer-col1-label">ผู้จัดเตรียมบิล / Prepared By</p>
+              </div>
+              <div class="space-y-4" id="print-footer-col2">
+                <div class="w-48 h-[1px] bg-gray-400 mx-auto"></div>
+                <p class="text-xs text-gray-400" id="print-footer-col2-label">ผู้รับเงิน / Authorized Signature</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- VIEW: BULK PREVIEW (ส่งพิมพ์จดหมาย) -->
+        <!-- ========================== -->
+        <div id="bulk-preview-view" class="hidden space-y-6 max-w-4xl mx-auto">
+          <div class="flex justify-between items-center no-print">
+            <button onclick="navigateTo('samples')" class="text-sm font-semibold text-gray-600 hover:underline"><i class="fas fa-chevron-left mr-1"></i>กลับไปหน้าระเบียนนก</button>
+            <div class="flex space-x-3">
+              <button onclick="window.print()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-5 rounded-lg shadow-md transition-all">
+                <i class="fas fa-print mr-2"></i>พิมพ์ซองจดหมาย
+              </button>
+            </div>
+          </div>
+
+          <!-- Printable Envelope Page Structure -->
+          <div class="mx-auto bg-white shadow-xl border border-gray-300 dark:border-gray-700 p-8 envelope-paper dark:bg-slate-900 dark:text-slate-100">
+            <div class="flex justify-between h-full flex-col">
+              <!-- Top Row: Sender Info -->
+              <div class="text-xs text-gray-600 dark:text-gray-400 leading-tight">
+                <p class="font-bold text-slate-800 dark:text-white text-sm">ผู้ส่ง (Sender):</p>
+                <p class="font-bold text-slate-900 dark:text-white">บริษัท เดอะเนสท์ ดีเอ็นเอ จำกัด</p>
+                <p>951/15 ถนนพุทธมณฑลสาย 3 แขวงศาลาธรรมสพน์ เขตทวีวัฒนา กรุงเทพมหานคร 10170</p>
+                <p>โทร: 092-494-4965</p>
+              </div>
+
+              <!-- Middle Row: Receiver Info (indented and larger) -->
+              <div class="my-6 pl-24">
+                <p class="text-xs text-gray-500 font-bold uppercase tracking-wider">ผู้รับ (Receiver):</p>
+                <div class="mt-2 text-base leading-relaxed">
+                  <p class="font-bold text-lg"><span id="env-cust-name">-</span></p>
+                  <p><span id="env-cust-address">-</span></p>
+                  <p>โทรศัพท์: <span id="env-cust-phone">-</span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================== -->
+        <!-- VIEW: SUMMARY PREVIEW (ใบสรุปผลตรวจนก A4) -->
+        <!-- ========================== -->
+        <div id="summary-preview-view" class="hidden space-y-6 max-w-4xl mx-auto">
+          <div class="flex justify-between items-center no-print">
+            <button onclick="navigateTo('samples')" class="text-sm font-semibold text-gray-600 hover:underline"><i class="fas fa-chevron-left mr-1"></i>กลับไปหน้าระเบียนนก</button>
+            <div class="flex space-x-3">
+              <button onclick="downloadSummaryPDF()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 px-5 rounded-lg shadow-md transition-all">
+                <i class="fas fa-file-pdf mr-2"></i>ดาวน์โหลด PDF
+              </button>
+              <button onclick="printSummaryDocument()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-5 rounded-lg shadow-md transition-all">
+                <i class="fas fa-print mr-2"></i>พิมพ์เอกสารสรุป (A4)
+              </button>
+            </div>
+          </div>
+
+          <!-- Printable Summary Page Structure (A4 Portrait) -->
+          <div class="mx-auto bg-white shadow-xl border border-gray-300 dark:border-gray-700 p-12 summary-paper dark:bg-slate-900 dark:text-slate-100" style="width: 21cm; min-height: 29.7cm; font-family: 'Sarabun', sans-serif;">
+            
+            <!-- Header Block -->
+            <div class="flex justify-between items-start border-b border-gray-200 dark:border-gray-800 pb-6 mb-6">
+              <div class="flex items-center space-x-4">
+                <img src="logo.jpg" class="w-16 h-16 rounded-full border border-gray-200">
+                <div>
+                  <h1 class="heading-font text-lg font-extrabold text-slate-900 dark:text-white uppercase tracking-wide">บริษัท เดอะเนสท์ ดีเอ็นเอ จำกัด</h1>
+                  <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">THE NEST DNA CO.,LTD</p>
+                  <p class="text-xs text-gray-400 mt-1">951/15 ถนนพุทธมณฑลสาย 3 แขวงศาลาธรรมสพน์ เขตทวีวัฒนา กรุงเทพมหานคร 10170</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <h2 class="text-lg font-bold text-indigo-600 dark:text-indigo-400">ใบรายงานสรุปผลการวิเคราะห์</h2>
+                <p class="text-xs text-gray-400 font-mono mt-1">Date: <span id="summary-print-date">-</span></p>
+              </div>
+            </div>
+
+            <!-- Customer Details Block -->
+            <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-gray-100 dark:border-gray-800 mb-6">
+              <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">ข้อมูลลูกค้าผู้ส่งตรวจ / Customer Details</span>
+              <div class="text-sm space-y-1">
+                <p><strong>ชื่อลูกค้า / Customer:</strong> <span id="summary-cust-name" class="font-bold text-slate-900 dark:text-white">-</span></p>
+                <p><strong>ที่อยู่ / Address:</strong> <span id="summary-cust-address" class="text-gray-600 dark:text-gray-300">-</span></p>
+                <p><strong>เบอร์โทรศัพท์ / Tel:</strong> <span id="summary-cust-phone" class="text-gray-600 dark:text-gray-300">-</span></p>
+              </div>
+            </div>
+
+            <!-- Birds Summary Table -->
+            <div class="mb-12">
+              <table class="w-full border-collapse">
+                <thead>
+                  <tr class="bg-slate-100 dark:bg-slate-800 text-xs font-bold text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700">
+                    <th class="px-4 py-3 text-center w-12 border border-gray-200 dark:border-gray-700">ลำดับ</th>
+                    <th class="px-4 py-3 text-left border border-gray-200 dark:border-gray-700">รหัสตัวอย่าง (Sample ID)</th>
+                    <th class="px-4 py-3 text-left border border-gray-200 dark:border-gray-700">รหัสห่วงขา (Ring ID)</th>
+                    <th class="px-4 py-3 text-left border border-gray-200 dark:border-gray-700">สายพันธุ์ (Species)</th>
+                    <th class="px-4 py-3 text-left border border-gray-200 dark:border-gray-700">ประเภทตัวอย่าง</th>
+                    <th class="px-4 py-3 text-center w-36 border border-gray-200 dark:border-gray-700">ผลการวิเคราะห์เพศ</th>
+                  </tr>
+                </thead>
+                <tbody id="summary-items-tbody" class="text-sm">
+                  <!-- Dynamic rows -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Bottom Footer Signatures -->
+            <div class="mt-auto border-t border-gray-200 dark:border-gray-800 pt-8 flex justify-end">
+              <div class="text-center w-64 space-y-4">
+                <p class="text-xs text-gray-400">ผู้รับรองผลการทดสอบ / Certifier</p>
+                <div class="w-48 h-[1px] bg-gray-400 mx-auto mt-12"></div>
+                <p class="text-sm font-bold text-slate-800 dark:text-white mt-2"><span id="summary-sign-name">-</span></p>
+                <p class="text-xs text-gray-400">Avian Inspector Specialist</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+
+      </div>
+    </main>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- 3. DIALOG MODALS SECTION -->
+  <!-- ========================================== -->
+
+  <!-- Modal: Customer Add/Edit Form -->
+  <div id="customer-form-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 flex items-center justify-center p-4">
+    <div class="relative bg-white rounded-2xl shadow-xl max-w-4xl w-full p-6 dark:bg-slate-800 border dark:border-slate-700 max-h-[90vh] overflow-y-auto">
+      <button onclick="closeModal('customer-form-modal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:text-gray-300">
+        <i class="fas fa-times text-lg"></i>
+      </button>
+      <h3 id="cust-modal-title" class="heading-font text-xl font-bold text-gray-900 dark:text-white mb-6">ลงทะเบียนลูกค้า</h3>
+      
+      <input type="hidden" id="cust-form-mode" value="add">
+      <input type="hidden" id="cust-form-id" value="">
+
+      <!-- Customer detail fields form grid -->
+      <form onsubmit="event.preventDefault(); saveCustomerFormSubmit();" class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-xs font-semibold mb-1 text-gray-600 dark:text-gray-400">ชื่อ - นามสกุลลูกค้า *</label>
+            <input type="text" id="cust-form-name" required placeholder="ชื่อ-สกุล" class="w-full text-sm p-2.5 border rounded-lg dark:bg-slate-900 dark:border-slate-700 dark:text-white">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1 text-gray-600 dark:text-gray-400">เลขบัตรประจำตัวประชาชน 13 หลัก</label>
+            <input type="text" id="cust-form-idcard" maxlength="13" placeholder="13 หลัก" class="w-full text-sm p-2.5 border rounded-lg dark:bg-slate-900 dark:border-slate-700 dark:text-white">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1 text-gray-600 dark:text-gray-400">เบอร์โทรศัพท์ *</label>
+            <input type="tel" id="cust-form-phone" required placeholder="เบอร์โทรศัพท์" class="w-full text-sm p-2.5 border rounded-lg dark:bg-slate-900 dark:border-slate-700 dark:text-white">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1 text-gray-600 dark:text-gray-400">อีเมล</label>
+            <input type="email" id="cust-form-email" placeholder="อีเมล" class="w-full text-sm p-2.5 border rounded-lg dark:bg-slate-900 dark:border-slate-700 dark:text-white">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1 text-gray-600 dark:text-gray-400">Facebook ของลูกค้า</label>
+            <input type="text" id="cust-form-facebook" placeholder="ลิงก์ Facebook หรือชื่อเฟส" class="w-full text-sm p-2.5 border rounded-lg dark:bg-slate-900 dark:border-slate-700 dark:text-white">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1 text-gray-600 dark:text-gray-400">Line ID หรือลิงก์ไลน์</label>
+            <input type="text" id="cust-form-line" placeholder="Line ID หรือเบอร์ไลน์" class="w-full text-sm p-2.5 border rounded-lg dark:bg-slate-900 dark:border-slate-700 dark:text-white">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1 text-gray-600 dark:text-gray-400">ประเภทลูกค้า</label>
+            <select id="cust-form-type" class="w-full text-sm p-2.5 border rounded-lg dark:bg-slate-900 dark:border-slate-700 dark:text-white">
+              <option value="สำนักงานใหญ่">สำนักงานใหญ่ (Head Office)</option>
+              <option value="สาขา">สาขา (Branch)</option>
+            </select>
+          </div>
+          <div class="col-span-2">
+            <label class="block text-xs font-semibold mb-1 text-gray-600 dark:text-gray-400">หมายเหตุ</label>
+            <input type="text" id="cust-form-notes" placeholder="หมายเหตุพิเศษ" class="w-full text-sm p-2.5 border rounded-lg dark:bg-slate-900 dark:border-slate-700 dark:text-white">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4">
+          <div>
+            <label class="block text-xs font-semibold mb-1 text-gray-600 dark:text-gray-400">ที่อยู่ติดต่อ *</label>
+            <textarea id="cust-form-address" required rows="2" placeholder="ที่อยู่บ้านเลขที่ ถนน ตำบล..." class="w-full text-sm p-2.5 border rounded-lg dark:bg-slate-900 dark:border-slate-700 dark:text-white"></textarea>
+          </div>
+        </div>
+
+        <!-- Dynamic bird additions sub-form in Table Format -->
+        <div class="border-t border-gray-100 dark:border-gray-700 pt-6">
+          <div class="flex justify-between items-center mb-4">
+            <h4 class="font-bold text-sm text-indigo-600 dark:text-indigo-400"><i class="fas fa-dove mr-1"></i>ลงทะเบียนตัวอย่างนกพร้อมกัน (Bird Samples Table List)</h4>
+            <button type="button" onclick="addBirdRowToCustomerForm()" class="bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-bold py-1.5 px-3 rounded-lg dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white border dark:border-gray-600">
+              <i class="fas fa-plus mr-1"></i>เพิ่มแถวนกใหม่
+            </button>
+          </div>
+          
+          <div class="overflow-x-auto border rounded-xl dark:border-gray-700">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-gray-50 text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-300">
+                <tr>
+                  <th class="px-3 py-2 w-28">รหัสนก</th>
+                  <th class="px-3 py-2 w-48">สายพันธุ์นก *</th>
+                  <th class="px-3 py-2 w-36">รหัสห่วงขา (Ring ID)</th>
+                  <th class="px-3 py-2 w-32">ประเภทตัวอย่าง</th>
+                  <th class="px-3 py-2 w-28">สีของนก</th>
+                  <th class="px-3 py-2 w-28">สถานะตรวจ</th>
+                  <th class="px-3 py-2 w-32">ผลวิเคราะห์เพศ</th>
+                  <th class="px-3 py-2 text-center w-12">ลบ</th>
+                </tr>
+              </thead>
+              <tbody id="cust-form-birds-container" class="divide-y divide-gray-100 dark:divide-gray-700">
+                <!-- Dynamic rows of birds as table rows -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="flex justify-end space-x-3 pt-6 border-t border-gray-100 dark:border-gray-700">
+          <button type="button" onclick="closeModal('customer-form-modal')" class="py-2.5 px-5 text-sm font-semibold bg-gray-100 text-gray-800 border rounded-lg dark:bg-gray-700 dark:text-white dark:border-gray-600">ยกเลิก</button>
+          <button type="submit" class="py-2.5 px-5 text-sm font-bold bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 transition-colors">บันทึกข้อมูลลูกค้า</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Customer Details Full Display -->
+  <div id="customer-detail-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 flex items-center justify-center p-4">
+    <div class="relative bg-white rounded-2xl shadow-xl max-w-3xl w-full p-6 dark:bg-slate-800 border dark:border-slate-700 max-h-[85vh] overflow-y-auto">
+      <button onclick="closeModal('customer-detail-modal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:text-gray-300">
+        <i class="fas fa-times text-lg"></i>
+      </button>
+      <h3 class="heading-font text-xl font-bold text-gray-900 dark:text-white mb-6">รายละเอียดข้อมูลลูกค้าระบบ</h3>
+
+      <div class="grid grid-cols-2 gap-4 text-sm mb-6 border-b border-gray-100 dark:border-gray-700 pb-6">
+        <div>
+          <p class="text-xs text-gray-400">รหัสลูกค้า / CustomerID:</p>
+          <p id="det-cust-id" class="font-bold text-indigo-600 dark:text-indigo-400">-</p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-400">ชื่อลูกค้า / Customer Name:</p>
+          <p id="det-cust-name" class="font-bold text-gray-800 dark:text-white">-</p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-400">ระดับประเภท / Type:</p>
+          <p id="det-cust-type" class="font-semibold">-</p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-400">หมายเลขบัตร (13 หลัก):</p>
+          <p id="det-cust-idcard" class="font-semibold">-</p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-400">เบอร์โทรติดต่อ / Tel:</p>
+          <p id="det-cust-phone" class="font-semibold">-</p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-400">อีเมลหลัก / Email:</p>
+          <p id="det-cust-email" class="font-semibold">-</p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-400">Facebook ของลูกค้า:</p>
+          <p id="det-cust-facebook" class="font-semibold text-blue-600 dark:text-blue-400">-</p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-400">Line ID หรือลิงก์:</p>
+          <p id="det-cust-line" class="font-semibold text-green-600 dark:text-green-400">-</p>
+        </div>
+        <div class="col-span-2">
+          <p class="text-xs text-gray-400">ที่อยู่ผู้ส่ง / Address:</p>
+          <p id="det-cust-address" class="text-gray-600 dark:text-gray-300">-</p>
+        </div>
+        <div class="col-span-2">
+          <p class="text-xs text-gray-400">บันทึกช่วยจำ / Notes:</p>
+          <p id="det-cust-notes" class="text-gray-600 dark:text-gray-300 italic">-</p>
+        </div>
+      </div>
+
+      <!-- Birds register under this customer -->
+      <div>
+        <h4 class="font-bold text-sm text-gray-900 dark:text-white mb-3">ทะเบียนประวัติตัวอย่างนกของลูกค้า</h4>
+        <div class="overflow-x-auto border rounded-xl">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-gray-50 text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-300">
+              <tr>
+                <th class="px-4 py-3">รหัสนกตัวอย่าง</th>
+                <th class="px-4 py-3">สายพันธุ์</th>
+                <th class="px-4 py-3">ประเภทตัวอย่าง / สี</th>
+                <th class="px-4 py-3">เพศผลวิเคราะห์</th>
+                <th class="px-4 py-3">การวิจัย</th>
+              </tr>
+            </thead>
+            <tbody id="det-cust-birds-tbody">
+              <!-- Dynamically loaded list of birds -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Bird Add/Edit Form -->
+  <div id="bird-form-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 flex items-center justify-center p-4">
+    <div class="relative bg-white rounded-2xl shadow-xl max-w-2xl w-full p-6 dark:bg-slate-800 border dark:border-slate-700 max-h-[90vh] overflow-y-auto">
+      <button onclick="closeModal('bird-form-modal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:text-gray-300">
+        <i class="fas fa-times text-lg"></i>
+      </button>
+      <h3 id="bird-modal-title" class="heading-font text-xl font-bold text-gray-900 dark:text-white mb-6">ลงทะเบียนตัวอย่างนก</h3>
+      
+      <input type="hidden" id="bird-form-mode" value="add">
+      <input type="hidden" id="bird-form-id" value="">
+
+      <form onsubmit="event.preventDefault(); saveBirdFormSubmit();" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold mb-1 text-gray-600 dark:text-gray-400">ระบุเจ้าของนกตัวอย่าง *</label>
+          <select id="bird-form-owner" onchange="document.getElementById('bird-form-owner-id').value = this.value" class="w-full text-sm p-3 border rounded-lg dark:bg-slate-900 dark:border-slate-700 dark:text-white">
+            <!-- Loaded list of owners -->
+          </select>
+          <input type="hidden" id="bird-form-owner-id" value="">
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold mb-1 text-gray-600 dark:text-gray-400">สายพันธุ์นก *</label>
+            <input type="text" id="bird-form-breed" required placeholder="เช่น นกพิราบซันคอร์นัวร์" class="w-full text-sm p-2.5 border rounded-lg dark:bg-slate-900 dark:border-slate-700 dark:text-white">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1 text-gray-600 dark:text-gray-400">รหัสห่วงขา (Ring ID)</label>
+            <input type="text" id="bird-form-ring-id" placeholder="เช่น TH-2026-001" class="w-full text-sm p-2.5 border rounded-lg dark:bg-slate-900 dark:border-slate-700 dark:text-white">
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-xs font-semibold mb-1 text-gray-600 dark:text-gray-400">ประเภทตัวอย่าง *</label>
+            <select id="bird-form-sample-type" class="w-full text-sm p-2.5 border rounded-lg dark:bg-slate-900 dark:border-slate-700 dark:text-white">
+              <option value="ขน">ขน (Feather)</option>
+              <option value="เปลือกไข่">เปลือกไข่ (Eggshell)</option>
+              <option value="เลือด">เลือด (Blood)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1 text-gray-600 dark:text-gray-400">สีตัวอย่างนก</label>
+            <input type="text" id="bird-form-color" placeholder="เช่น ขาวแกมเหลือง" class="w-full text-sm p-2.5 border rounded-lg dark:bg-slate-900 dark:border-slate-700 dark:text-white">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-gray-100 dark:border-gray-700 pt-4">
+          <div>
+            <label class="block text-xs font-semibold mb-1 text-gray-600 dark:text-gray-400">สถานะผลการตรวจแล็บ</label>
+            <select id="bird-form-status" onchange="handleBirdFormStatusChange(this)" class="w-full text-sm p-2.5 border rounded-lg dark:bg-slate-900 dark:border-slate-700 dark:text-white">
+              <option value="รอผลตรวจ">รอผลตรวจ (Waiting Lab Analysis)</option>
+              <option value="การตรวจเสร็จสิ้น">การตรวจเสร็จสิ้น (Verification Completed)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1 text-gray-600 dark:text-gray-400">ผลตรวจวิเคราะห์เพศนก</label>
+            <select id="bird-form-sex" disabled class="w-full text-sm p-2.5 border rounded-lg dark:bg-slate-900 dark:border-slate-700 dark:text-white">
+              <option value="Unknown">รอตรวจ / สรุปไม่ได้ (Unknown)</option>
+              <option value="Male">ตัวผู้ (Male ♂)</option>
+              <option value="Female">ตัวเมีย (Female ♀)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex justify-end space-x-3 pt-6 border-t border-gray-100 dark:border-gray-700">
+          <button type="button" onclick="closeModal('bird-form-modal')" class="py-2.5 px-5 text-sm font-semibold bg-gray-100 text-gray-800 border rounded-lg dark:bg-gray-700 dark:text-white dark:border-gray-600">ยกเลิก</button>
+          <button type="submit" class="py-2.5 px-5 text-sm font-bold bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 transition-colors">บันทึกตัวอย่างนก</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Bird Details Full Display -->
+  <div id="bird-detail-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 flex items-center justify-center p-4">
+    <div class="relative bg-white rounded-2xl shadow-xl max-w-2xl w-full p-6 dark:bg-slate-800 border dark:border-slate-700 max-h-[85vh] overflow-y-auto">
+      <button onclick="closeModal('bird-detail-modal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:text-gray-300">
+        <i class="fas fa-times text-lg"></i>
+      </button>
+      <h3 class="heading-font text-xl font-bold text-gray-900 dark:text-white mb-6">รายละเอียดผลแล็บตัวอย่างนก</h3>
+
+      <div class="grid grid-cols-2 gap-4 text-sm mb-6 border-b border-gray-100 dark:border-gray-700 pb-6">
+        <div>
+          <p class="text-xs text-gray-400">รหัสตัวอย่างนก / SpecimenID:</p>
+          <p id="det-bird-id" class="font-bold text-indigo-600 dark:text-indigo-400">-</p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-400">รหัสห่วงขา / Ring ID:</p>
+          <p id="det-bird-ring-id" class="font-bold text-amber-600 dark:text-amber-400">-</p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-400">สายพันธุ์ของนก / Breed:</p>
+          <p id="det-bird-breed" class="font-bold text-gray-800 dark:text-white">-</p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-400">ประเภทตัวอย่าง / Sample Type:</p>
+          <p id="det-bird-sample-type" class="font-semibold">-</p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-400">สีตัวอย่าง / Color:</p>
+          <p id="det-bird-color" class="font-semibold">-</p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-400">สถานะผลแล็บ / Status:</p>
+          <p id="det-bird-status" class="font-semibold">-</p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-400">ผลสรุปวิเคราะห์เพศนก / Sex:</p>
+          <p id="det-bird-sex" class="font-bold text-indigo-600 dark:text-indigo-400">-</p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-400">ผู้ตรวจสอบผล / Approved By:</p>
+          <p id="det-bird-inspected-by" class="font-semibold">-</p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-400">วันที่อนุมัติผล / Inspected Date:</p>
+          <p id="det-bird-inspected-date" class="font-semibold">-</p>
+        </div>
+      </div>
+
+      <!-- Owner Info Card inside Bird display -->
+      <div class="bg-gray-50 p-4 rounded-xl dark:bg-gray-700 border dark:border-gray-600">
+        <h4 class="font-bold text-xs text-gray-400 uppercase tracking-wider mb-2">ข้อมูลผู้ส่งตรวจ (เจ้าของนกตัวอย่าง)</h4>
+        <div class="grid grid-cols-2 gap-3 text-xs">
+          <div>
+            <p class="text-gray-400">รหัสลูกค้า / CustomerID:</p>
+            <p id="det-bird-owner-id" class="font-semibold text-gray-800 dark:text-white">-</p>
+          </div>
+          <div>
+            <p class="text-gray-400">ชื่อลูกค้า / Name:</p>
+            <p id="det-bird-owner-name" class="font-semibold text-gray-800 dark:text-white">-</p>
+          </div>
+          <div>
+            <p class="text-gray-400">เบอร์โทรศัพท์ / Phone:</p>
+            <p id="det-bird-owner-phone" class="font-semibold text-gray-800 dark:text-white">-</p>
+          </div>
+          <div>
+            <p class="text-gray-400">อีเมลติดต่อ / Email:</p>
+            <p id="det-bird-owner-email" class="font-semibold text-gray-800 dark:text-white">-</p>
+          </div>
+          <div class="col-span-2">
+            <p class="text-gray-400">ที่อยู่จัดส่ง / Address:</p>
+            <p id="det-bird-owner-address" class="text-gray-600 dark:text-gray-300">-</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Document Invoice/Quotation Add/Edit Form -->
+  <div id="document-form-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 flex items-center justify-center p-4">
+    <div class="relative bg-white rounded-2xl shadow-xl max-w-4xl w-full p-6 dark:bg-slate-800 border dark:border-slate-700 max-h-[90vh] overflow-y-auto">
+      <button onclick="closeModal('document-form-modal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:text-gray-300">
+        <i class="fas fa-times text-lg"></i>
+      </button>
+      <h3 id="doc-modal-title" class="heading-font text-xl font-bold text-gray-900 dark:text-white mb-6">ออกบิลใหม่</h3>
+      
+      <input type="hidden" id="doc-form-mode" value="add">
+      <input type="hidden" id="doc-form-type" value="Receipt">
+
+      <form onsubmit="event.preventDefault(); saveDocumentFormSubmit();" class="space-y-4">
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-xs font-semibold mb-1 text-gray-600 dark:text-gray-400">เลขที่ใบสำคัญ</label>
+            <input type="text" id="doc-form-id" readonly class="w-full text-sm p-2.5 bg-gray-100 border rounded-lg dark:bg-slate-900 dark:border-slate-700 dark:text-white font-mono">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1 text-gray-600 dark:text-gray-400">วันที่เอกสาร *</label>
+            <input type="date" id="doc-form-date" required class="w-full text-sm p-2.5 border rounded-lg dark:bg-slate-900 dark:border-slate-700 dark:text-white">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1 text-gray-600 dark:text-gray-400">ลูกค้าผู้ส่งตรวจ *</label>
+            <select id="doc-form-owner" onchange="handleDocOwnerChange(this)" class="w-full text-sm p-2.5 border rounded-lg dark:bg-slate-900 dark:border-slate-700 dark:text-white">
+              <!-- Loaded list of owners -->
+            </select>
+          </div>
+        </div>
+
+        <!-- Optional Quotation Link Option (For Receipts) -->
+        <div id="doc-form-quotation-link-panel" class="hidden bg-indigo-50/50 p-4 rounded-xl border border-indigo-100 dark:bg-gray-700/30 dark:border-gray-700">
+          <label class="block text-xs font-bold text-indigo-700 mb-1 dark:text-indigo-400"><i class="fas fa-link mr-1"></i>อ้างอิงและดึงข้อมูลจากใบเสนอราคา (Link from Quotation)</label>
+          <select id="doc-form-quotation-link" onchange="handleLinkQuotationChange(this)" class="w-full text-xs p-2 bg-white border border-gray-300 rounded dark:bg-slate-800 dark:border-slate-700 dark:text-white">
+            <!-- Active approved quotations options -->
+          </select>
+        </div>
+
+        <!-- Billing items tables -->
+        <div class="border-t border-gray-100 dark:border-gray-700 pt-4">
+          <div class="flex justify-between items-center mb-3">
+            <h4 class="font-bold text-sm text-gray-900 dark:text-white">รายการธุรกรรมบริการตรวจ (Invoice Items Lines)</h4>
+            <div class="flex gap-2">
+              <button type="button" onclick="openDocBirdSelectModal()" class="bg-indigo-100 hover:bg-indigo-200 text-indigo-800 text-xs font-bold py-1.5 px-3 rounded-lg dark:bg-gray-700 dark:text-white border dark:border-gray-600">
+                <i class="fas fa-search-plus mr-1"></i>เลือกนกตรวจวิเคราะห์
+              </button>
+              <button type="button" onclick="addDocumentLineRow()" class="bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-bold py-1.5 px-3 rounded-lg dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white border dark:border-gray-600">
+                <i class="fas fa-plus mr-1"></i>เพิ่มรายการเปล่า
+              </button>
+            </div>
+          </div>
+
+          <div id="doc-form-lines-container" class="space-y-2">
+            <!-- lines added here -->
+          </div>
+        </div>
+
+        <!-- Total sum panel -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center bg-gray-50 p-4 rounded-xl dark:bg-gray-700/50">
+          <div>
+            <label class="block text-xs font-semibold mb-1 text-gray-500">ส่วนลดท้ายบิลเพิ่มเติม (฿)</label>
+            <input type="number" id="doc-form-discount" min="0" value="0" oninput="recalcDocumentTotals()" class="w-48 text-sm p-2 border rounded-lg dark:bg-slate-900 dark:border-slate-700 dark:text-white">
+          </div>
+          <div class="text-right">
+            <span class="text-xs text-gray-400 block">ยอดรวมสุทธิทั้งสิ้น (Net Paid Total)</span>
+            <span id="doc-form-total-sum" class="text-2xl font-extrabold text-indigo-600 dark:text-indigo-400 heading-font">฿0</span>
+          </div>
+        </div>
+
+        <div class="flex justify-end space-x-3 pt-6 border-t border-gray-100 dark:border-gray-700">
+          <button type="button" onclick="closeModal('document-form-modal')" class="py-2.5 px-5 text-sm font-semibold bg-gray-100 text-gray-800 border rounded-lg dark:bg-gray-700 dark:text-white dark:border-gray-600">ยกเลิก</button>
+          <button type="submit" class="py-2.5 px-5 text-sm font-bold bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 transition-colors">บันทึกออกบิล</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Expense Input Form -->
+  <div id="expense-form-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 flex items-center justify-center p-4">
+    <div class="relative bg-white rounded-2xl shadow-xl max-w-md w-full p-6 dark:bg-slate-800 border dark:border-slate-700">
+      <button onclick="closeModal('expense-form-modal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:text-gray-300">
+        <i class="fas fa-times text-lg"></i>
+      </button>
+      <h3 class="heading-font text-xl font-bold text-gray-900 dark:text-white mb-6">บันทึกรายจ่ายใหม่</h3>
+
+      <form onsubmit="event.preventDefault(); saveExpenseFormSubmit();" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold mb-1 text-gray-500">คำอธิบายรายการรายจ่าย *</label>
+          <input type="text" id="exp-form-desc" required placeholder="เช่น ซื้อถุงมือแพทย์และหลอดทดลอง" class="w-full text-sm p-3 border rounded-lg dark:bg-slate-900 dark:border-slate-700 dark:text-white">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1 text-gray-500">จำนวนเงินรายจ่าย (บาท) *</label>
+          <input type="number" id="exp-form-amount" required min="1" placeholder="ยอดรวมเป็นบาท" class="w-full text-sm p-3 border rounded-lg dark:bg-slate-900 dark:border-slate-700 dark:text-white">
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold mb-1 text-gray-500">วันที่ทำรายการ</label>
+            <input type="date" id="exp-form-date" required class="w-full text-sm p-3 border rounded-lg dark:bg-slate-900 dark:border-slate-700 dark:text-white">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1 text-gray-500">หมวดหมู่</label>
+            <select id="exp-form-category" class="w-full text-sm p-3 border rounded-lg dark:bg-slate-900 dark:border-slate-700 dark:text-white">
+              <option value="Supply">วัสดุอุปกรณ์วิจัย</option>
+              <option value="Equipment">เครื่องมือทางการแพทย์</option>
+              <option value="Utility">ค่าน้ำ/ค่าไฟ/อินเทอร์เน็ต</option>
+              <option value="Other">ค่าใช้จ่ายอื่นๆ</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit" class="w-full py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg shadow-md transition-all mt-4">
+          บันทึกค่าใช้จ่าย
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Select Birds for Document billing -->
+  <div id="doc-bird-select-modal" class="hidden fixed inset-0 z-[60] overflow-y-auto bg-black bg-opacity-50 flex items-center justify-center p-4">
+    <div class="relative bg-white rounded-2xl shadow-xl max-w-2xl w-full p-6 dark:bg-slate-800 border dark:border-slate-700 max-h-[80vh] overflow-y-auto">
+      <button type="button" onclick="closeModal('doc-bird-select-modal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:text-gray-300">
+        <i class="fas fa-times text-lg"></i>
+      </button>
+      <h3 class="heading-font text-lg font-bold text-gray-900 dark:text-white mb-4">เลือกนกตรวจวิเคราะห์เพื่อดึงข้อมูล</h3>
+      <p class="text-xs text-gray-400 mb-3">แสดงเฉพาะนกตรวจวิเคราะห์ของลูกค้าที่เลือกอยู่ในการออกบิล</p>
+      
+      <div class="overflow-x-auto border rounded-xl mb-4">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-gray-50 text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-300">
+            <tr>
+              <th class="px-4 py-2.5 text-center w-12">เลือก</th>
+              <th class="px-4 py-2.5">รหัสนก</th>
+              <th class="px-4 py-2.5">สายพันธุ์</th>
+              <th class="px-4 py-2.5">ห่วงขา (Ring ID)</th>
+              <th class="px-4 py-2.5">ประเภทตัวอย่าง</th>
+              <th class="px-4 py-2.5">เพศ</th>
+            </tr>
+          </thead>
+          <tbody id="doc-bird-select-tbody">
+            <!-- JavaScript loads the selected owner's birds here -->
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="flex justify-end space-x-3">
+        <button type="button" onclick="closeModal('doc-bird-select-modal')" class="py-2 px-4 text-xs font-semibold bg-gray-100 text-gray-800 border rounded-lg dark:bg-gray-700 dark:text-white dark:border-gray-600">ยกเลิก</button>
+        <button type="button" onclick="addSelectedBirdsToDocForm()" class="py-2 px-4 text-xs font-bold bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700">ยืนยันการเพิ่ม</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Include Application Code Logic -->
+  <script src="logo_base64.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
